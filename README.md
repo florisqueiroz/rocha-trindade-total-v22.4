@@ -1,3 +1,52 @@
+=== render.yaml ===
+services:
+    - type: web
+    name: nuvem-floris-rocha
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    plan: free
+    envVars:
+            - key: META_AI_TOKEN
+        sync: false
+            - key: FACEBOOK_PAGE_TOKEN
+        sync: false
+            - key: INSTAGRAM_TOKEN  
+        sync: false
+            - key: TWITTER_BEARER_TOKEN
+        sync: false
+            - key: WHATSAPP_TOKEN
+        sync: false
+
+=== package.json ===
+{
+  "name": "nuvem-floris-rocha",
+  "version": "22.4.0",
+  "description": "ROCHA TRINDADE TOTAL V22.4 - NUVEM-FLORIS-ROCHA",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+
+=== server.js ===
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('ROCHA TRINDADE TOTAL V22.4 ONLINE - NUVEM-FLORIS-ROCHA ATIVA');
+});
+
+app.listen(PORT, () => {
+  console.log(`NUVEM-FLORIS-ROCHA rodando na porta ${PORT}`);
+  console.log('Nucleo 70x70 girando o X 24h - Limite 1200x1200x1200');
+});
 services:
     - type: web
     name: nuvem-floris-rocha
