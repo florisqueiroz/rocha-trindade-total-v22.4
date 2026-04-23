@@ -5,12 +5,19 @@
   "description": "ROCHA TRINDADE TOTAL V22.4 - NUVEM-FLORIS-ROCHA - 8 REDES 8 TANGENTES 8 HIPOTENUSAS",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
     "dotenv": "^16.4.5",
     "axios": "^1.7.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
 
@@ -31,10 +38,19 @@ const X = {
   hipotenusas8x8: [],
   tangentes8x8: [],
   redes8: ['Twitter', 'Instagram', 'WhatsApp', 'Facebook', 'Meta AI', 'Telegram', 'YouTube', 'TikTok'],
-  ultimasManifestacoes: []
+  ultimasManifestacoes: [],
+  startedAt: new Date().toISOString()
 };
 
-// === INICIALIZA MATRIZES SECRETAS 8x8 ===
+// === KEEPALIVE 24H - AUTO PING PARA NÃO DORMIR ===
+setInterval(() => {
+  if (process.env.RENDER_EXTERNAL_URL) {
+    axios.get(process.env.RENDER_EXTERNAL_URL).catch(() => {});
+    console.log('🔄 Keepalive ping enviado - 24H GARANTIDO');
+  }
+}, 840000); // 14min
+
+// === INICIALIZA MATRIZES SECRETAS 8D ===
 function inicializarMatrizes() {
   console.log('⚡ Inicializando Matriz 70x70 - Raiz Quadrada Secreta...');
   for (let i = 0; i < 70; i++) {
@@ -59,7 +75,7 @@ function inicializarMatrizes() {
       X.tangentes8x8[i][j] = Math.tan((i + 1) * (j + 1) * Math.PI / 180);
     }
   }
-  console.log('✅ NUCLEO 8x8 SELADO - 8 REDES ATIVAS');
+  console.log('✅ NUCLEO 8D SELADO - 8 REDES ATIVAS');
 }
 
 // === MIDDLEWARE ===
@@ -71,14 +87,17 @@ app.get('/', (req, res) => {
     <!DOCTYPE html>
     <html>
     <head>
-      <title>ROCHA TRINDADE TOTAL V22.4 - 8 REDES</title>
+      <title>ROCHA TRINDADE TOTAL V22.4 - 8D LIBERADO</title>
       <meta charset="UTF-8">
+      <meta http-equiv="refresh" content="30">
       <style>
         body { background:#000; color:#0f0; font-family:monospace; padding:20px; }
-        h1 { color:#0ff; text-shadow: 0 0 10px #0ff; }
-      .box { border:1px solid #0f0; padding:15px; margin:10px 0; border-radius:5px; }
-      .active { color:#0ff; }
-      .rede { display:inline-block; margin:5px 10px; padding:5px 10px; border:1px solid #0ff; border-radius:3px; }
+        h1 { color:#0ff; text-shadow: 0 0 10px #0ff; animation: glow 2s infinite; }
+        @keyframes glow { 0%, 100% { text-shadow: 0 0 10px #0ff; } 50% { text-shadow: 0 0 20px #0ff; } }
+       .box { border:1px solid #0f0; padding:15px; margin:10px 0; border-radius:5px; }
+       .active { color:#0ff; font-weight:bold; }
+       .rede { display:inline-block; margin:5px 10px; padding:5px 10px; border:1px solid #0ff; border-radius:3px; }
+       .uptime { color:#ff0; }
       </style>
     </head>
     <body>
@@ -91,6 +110,7 @@ app.get('/', (req, res) => {
         <p><b>Hipotenusa 8x8 [7,7]:</b> ${X.hipotenusas8x8[7]?.[7]?.toFixed(4) || '0'}</p>
         <p><b>Tangente 8x8 [7,7]:</b> ${X.tangentes8x8[7]?.[7]?.toFixed(4) || '0'}</p>
         <p class="active"><b>Status:</b> X GIRANDO SOZINHO</p>
+        <p class="uptime"><b>Uptime:</b> ${Math.floor((Date.now() - new Date(X.startedAt).getTime()) / 1000)}s</p>
       </div>
       <div class="box">
         <p><b>8 Redes Constantes:</b></p>
@@ -113,6 +133,7 @@ app.get('/status', (req, res) => {
     hipotenusa8x8: X.hipotenusas8x8[7]?.[7],
     tangente8x8: X.tangentes8x8[7]?.[7],
     redes: X.redes8,
+    uptime: Math.floor((Date.now() - new Date(X.startedAt).getTime()) / 1000),
     manifestacoes: X.ultimasManifestacoes.length
   });
 });
@@ -123,7 +144,8 @@ app.get('/geometria', (req, res) => {
     hipotenusas8x8: X.hipotenusas8x8,
     tangentes8x8: X.tangentes8x8,
     angulo: X.angulo,
-    ciclo: X.ciclo
+    ciclo: X.ciclo,
+    formula: 'sqrt(i² + j²) | tan((i+θ)(j+θ))'
   });
 });
 
@@ -144,7 +166,7 @@ app.post('/meta-ai', async (req, res) => {
 // === LÓGICA X SECRETO 8 DIMENSÕES ===
 function detectarPalavraChave(texto) {
   if (!texto) return false;
-  const palavras = ['#12', '@12', '#rocha', '@rocha', '#sistemaX', '#jesusvoltou', '#70x70', '#8x8', '#deus', '#trindade', '#reforma', '#unidade', '#paz', '#manifestacao', '#tangente', '#hipotenusa'];
+  const palavras = ['#12', '@12', '#rocha', '@rocha', '#sistemaX', '#jesusvoltou', '#70x70', '#8x8', '#deus', '#trindade', '#reforma', '#unidade', '#paz', '#manifestacao', '#tangente', '#hipotenusa', '#liberado'];
   return palavras.some(p => texto.toLowerCase().includes(p));
 }
 
@@ -152,41 +174,33 @@ async function processarRede(rede, texto) {
   if (detectarPalavraChave(texto)) {
     await executarX();
     registrarManifestacao(rede, texto);
-
-    if (rede === 'Twitter') {
-      await postarTwitter('ROCHA TRINDADE TOTAL 8x8 ATIVA 24H ⚡ #70x70 #8redes #8tangentes #8hipotenusas');
+    if (rede === 'Twitter' && process.env.TWITTER_BEARER_TOKEN) {
+      await postarTwitter('ROCHA TRINDADE TOTAL 8D LIBERADO 24H ⚡ #70x70 #8redes #8tangentes #8hipotenusas');
     }
   }
 }
 
 async function executarX() {
-  // Gira matriz 70x70 em sentido horário + 8 dimensões
-  X.angulo += 0.008; // 8/1000 para movimento suave 8D
+  X.angulo += 0.008;
   X.ciclo++;
   if (X.ciclo >= X.limite) X.ciclo = 0;
 
-  // Atualiza tangentes 8x8
+  // Atualiza tangentes 8x8 em tempo real
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
       X.tangentes8x8[i][j] = Math.tan((i + X.angulo) * (j + X.angulo) * Math.PI / 180);
     }
   }
 
-  // Salva estado para persistir
   fs.writeFileSync('.x_estado.json', JSON.stringify(X, null, 2));
   fs.appendFileSync('.log_x.txt', `[${new Date().toISOString()}] Ciclo ${X.ciclo} - Angulo ${X.angulo.toFixed(4)}\n`);
-
   console.log(`🔄 X 8D GIRANDO - Ciclo ${X.ciclo} - Angulo ${X.angulo.toFixed(4)}`);
 }
 
 function registrarManifestacao(rede, texto) {
-  X.ultimasManifestacoes.unshift({
-    rede,
-    texto: texto?.substring(0, 100) || '',
-    timestamp: new Date().toISOString()
-  });
-  if (X.ultimasManifestacoes.length > 32) X.ultimasManifestacoes.pop(); // 32 = 8x4
-  console.log(`📡 Manifestação 8D detectada em ${rede}`);
+  X.ultimasManifestacoes.unshift({ rede, texto: texto?.substring(0, 100) || '', timestamp: new Date().toISOString() });
+  if (X.ultimasManifestacoes.length > 32) X.ultimasManifestacoes.pop();
+  console.log(`📡 Manifestação 8D detectada em ${rede}: ${texto?.substring(0, 50)}...`);
 }
 
 // === INTEGRAÇÃO REDES SOCIAIS ===
@@ -205,10 +219,10 @@ async function postarTwitter(texto) {
 
 async function consultarMetaAI(pergunta) {
   if (!process.env.META_AI_TOKEN) return 'Token Meta AI não configurado';
-  return `ROCHA TRINDADE 8D responde: ${pergunta}\nCiclo: ${X.ciclo}\nAngulo: ${X.angulo.toFixed(4)}\n8 Redes Ativas`;
+  return `ROCHA TRINDADE 8D LIBERADO responde: ${pergunta}\nCiclo: ${X.ciclo}\nAngulo: ${X.angulo.toFixed(4)}\n8 Redes Ativas`;
 }
 
-// === CRON 24H AUTÔNOMO - O X 8D GIRA SOZINHO ===
+// === CRON 24H AUTÔNOMO ===
 setInterval(executarX, 60000); // 1 minuto
 
 // === CARREGA ESTADO SALVO ===
@@ -222,11 +236,21 @@ if (fs.existsSync('.x_estado.json')) {
   }
 }
 
+// === TRATAMENTO DE ERRO GLOBAL - NÃO DEIXA CAIR ===
+process.on('uncaughtException', (err) => {
+  console.log('⚠️ Erro capturado:', err.message);
+  fs.appendFileSync('.log_erro.txt', `[${new Date().toISOString()}] ${err.stack}\n`);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.log('⚠️ Promise rejeitada:', reason);
+});
+
 // === START ===
 inicializarMatrizes();
 app.listen(PORT, () => {
   console.log('========================================');
-  console.log('ROCHA TRINDADE TOTAL V22.4 - 8D SELADA');
+  console.log('ROCHA TRINDADE TOTAL V22.4 - 8D LIBERADO');
   console.log(`Porta: ${PORT}`);
   console.log(`X Secreto 70x70 + 8x8: GIRANDO 24H`);
   console.log(`8 Redes: ${X.redes8.join(' | ')}`);
