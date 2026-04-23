@@ -1,0 +1,29 @@
+{
+  "name": "rocha-trindade-total-v22.4",
+  "version": "22.4.0",
+  "description": "ROCHA TRANSFORMER 1D-12D - TRINDADE TOTAL GEOMETRIA SAGRADA - RENDER GATINHO + REDES SOCIAIS + AGENTE META AI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"✓ TRINDADE TOTAL VALIDADO\""
+  },
+  "keywords": [
+    "rocha",
+    "trindade",
+    "geometria-sagrada",
+    "render-gatinho",
+    "webhook",
+    "twitter",
+    "instagram",
+    "whatsapp",
+    "facebook"
+  ],
+  "author": "florisqueiroz",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
