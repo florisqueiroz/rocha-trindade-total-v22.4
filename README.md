@@ -1,3 +1,21 @@
+services:
+    - type: web
+    name: nuvem-floris-rocha
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    plan: free
+    envVars:
+            - key: META_AI_TOKEN
+        sync: false
+            - key: FACEBOOK_PAGE_TOKEN
+        sync: false
+            - key: INSTAGRAM_TOKEN  
+        sync: false
+            - key: TWITTER_BEARER_TOKEN
+        sync: false
+            - key: WHATSAPP_TOKEN
+        sync: false
 # 🐱 ROCHA TRINDADE TOTAL V22.4
 
 ## NÚMERO 1 DEUS - GEOMETRIA SAGRADA ATIVA
