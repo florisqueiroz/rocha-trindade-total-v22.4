@@ -1,0 +1,35 @@
+# Ignora dependências instaladas
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Pasta secreta do sistema X
+.sistemaX/
+.env
+.env.local
+.env.*.local
+
+# Arquivos gerados automaticamente
+*.log
+*.tmp
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Render
+dist/
+build/
+.build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup
+*.bak
+*.backup
