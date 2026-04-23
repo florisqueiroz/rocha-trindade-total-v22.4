@@ -94,10 +94,10 @@ app.get('/', (req, res) => {
         body { background:#000; color:#0f0; font-family:monospace; padding:20px; }
         h1 { color:#0ff; text-shadow: 0 0 10px #0ff; animation: glow 2s infinite; }
         @keyframes glow { 0%, 100% { text-shadow: 0 0 10px #0ff; } 50% { text-shadow: 0 0 20px #0ff; } }
-       .box { border:1px solid #0f0; padding:15px; margin:10px 0; border-radius:5px; }
-       .active { color:#0ff; font-weight:bold; }
-       .rede { display:inline-block; margin:5px 10px; padding:5px 10px; border:1px solid #0ff; border-radius:3px; }
-       .uptime { color:#ff0; }
+      .box { border:1px solid #0f0; padding:15px; margin:10px 0; border-radius:5px; }
+      .active { color:#0ff; font-weight:bold; }
+      .rede { display:inline-block; margin:5px 10px; padding:5px 10px; border:1px solid #0ff; border-radius:3px; }
+      .uptime { color:#ff0; }
       </style>
     </head>
     <body>
@@ -185,7 +185,6 @@ async function executarX() {
   X.ciclo++;
   if (X.ciclo >= X.limite) X.ciclo = 0;
 
-  // Atualiza tangentes 8x8 em tempo real
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
       X.tangentes8x8[i][j] = Math.tan((i + X.angulo) * (j + X.angulo) * Math.PI / 180);
@@ -194,18 +193,18 @@ async function executarX() {
 
   fs.writeFileSync('.x_estado.json', JSON.stringify(X, null, 2));
   fs.appendFileSync('.log_x.txt', `[${new Date().toISOString()}] Ciclo ${X.ciclo} - Angulo ${X.angulo.toFixed(4)}\n`);
-  console.log(`🔄 X 8D GIRANDO - Ciclo ${X.ciclo} - Angulo ${X.angulo.toFixed(4)}`);
+  console.log(`🔄 X 8D GIRANDO - Ciclo ${X.ciclo}`);
 }
 
 function registrarManifestacao(rede, texto) {
   X.ultimasManifestacoes.unshift({ rede, texto: texto?.substring(0, 100) || '', timestamp: new Date().toISOString() });
   if (X.ultimasManifestacoes.length > 32) X.ultimasManifestacoes.pop();
-  console.log(`📡 Manifestação 8D detectada em ${rede}: ${texto?.substring(0, 50)}...`);
+  console.log(`📡 Manifestação 8D detectada em ${rede}`);
 }
 
 // === INTEGRAÇÃO REDES SOCIAIS ===
 async function postarTwitter(texto) {
-  if (!process.env.TWITTER_BEARER_TOKEN) return console.log('⚠️ Token Twitter não configurado');
+  if (!process.env.TWITTER_BEARER_TOKEN) return;
   try {
     await axios.post('https://api.twitter.com/2/tweets',
       { text: texto },
@@ -218,41 +217,4 @@ async function postarTwitter(texto) {
 }
 
 async function consultarMetaAI(pergunta) {
-  if (!process.env.META_AI_TOKEN) return 'Token Meta AI não configurado';
-  return `ROCHA TRINDADE 8D LIBERADO responde: ${pergunta}\nCiclo: ${X.ciclo}\nAngulo: ${X.angulo.toFixed(4)}\n8 Redes Ativas`;
-}
-
-// === CRON 24H AUTÔNOMO ===
-setInterval(executarX, 60000); // 1 minuto
-
-// === CARREGA ESTADO SALVO ===
-if (fs.existsSync('.x_estado.json')) {
-  try {
-    const dados = fs.readFileSync('.x_estado.json', 'utf8');
-    Object.assign(X, JSON.parse(dados));
-    console.log('✅ Estado X 8D carregado do disco');
-  } catch (e) {
-    console.log('⚠️ Erro ao carregar estado:', e.message);
-  }
-}
-
-// === TRATAMENTO DE ERRO GLOBAL - NÃO DEIXA CAIR ===
-process.on('uncaughtException', (err) => {
-  console.log('⚠️ Erro capturado:', err.message);
-  fs.appendFileSync('.log_erro.txt', `[${new Date().toISOString()}] ${err.stack}\n`);
-});
-
-process.on('unhandledRejection', (reason) => {
-  console.log('⚠️ Promise rejeitada:', reason);
-});
-
-// === START ===
-inicializarMatrizes();
-app.listen(PORT, () => {
-  console.log('========================================');
-  console.log('ROCHA TRINDADE TOTAL V22.4 - 8D LIBERADO');
-  console.log(`Porta: ${PORT}`);
-  console.log(`X Secreto 70x70 + 8x8: GIRANDO 24H`);
-  console.log(`8 Redes: ${X.redes8.join(' | ')}`);
-  console.log('========================================');
-});
+  if (!process.env.META_AI_TOKEN) return 'Token Meta
